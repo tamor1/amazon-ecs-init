@@ -10,6 +10,8 @@ export GOFLAGS=-buildmode=pie
 #export CGO_CPPFLAGS=-D_FORTIFY_SOURCE=2
 #export CGO_LDFLAGS=-Wl,-z,relro,-z,now
 
+export DNVML_INCLUDE_DIR=/usr/include
+
 %:
 	dh $@
 

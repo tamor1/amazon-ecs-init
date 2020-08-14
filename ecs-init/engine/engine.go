@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ecs-init/ecs-init/exec"
 	"github.com/aws/amazon-ecs-init/ecs-init/exec/iptables"
 	"github.com/aws/amazon-ecs-init/ecs-init/exec/sysctl"
-	"github.com/aws/amazon-ecs-init/ecs-init/gpu"
 
 	log "github.com/cihub/seelog"
 )
@@ -52,7 +51,6 @@ type Engine struct {
 	loopbackRouting          loopbackRouting
 	credentialsProxyRoute    credentialsProxyRoute
 	ipv6RouterAdvertisements ipv6RouterAdvertisements
-	nvidiaGPUManager         gpu.GPUManager
 }
 
 // New creates an instance of Engine
@@ -84,7 +82,6 @@ func New() (*Engine, error) {
 		loopbackRouting:          loopbackRouting,
 		credentialsProxyRoute:    credentialsProxyRoute,
 		ipv6RouterAdvertisements: ipv6RouterAdvertisements,
-		nvidiaGPUManager:         gpu.NewNvidiaGPUManager(),
 	}, nil
 }
 
@@ -146,11 +143,6 @@ func (e *Engine) PreStartGPU() error {
 	envVariables := e.docker.LoadEnvVars()
 	if val, ok := envVariables[config.GPUSupportEnvVar]; ok {
 		if val == "true" {
-			err := e.nvidiaGPUManager.Setup()
-			if err != nil {
-				log.Errorf("Nvidia GPU Manager: %v", err)
-				return engineError("Nvidia GPU Manager", err)
-			}
 		}
 	}
 	return nil

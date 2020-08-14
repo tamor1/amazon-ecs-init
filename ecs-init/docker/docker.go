@@ -23,7 +23,6 @@ import (
 
 	"github.com/aws/amazon-ecs-init/ecs-init/backoff"
 	"github.com/aws/amazon-ecs-init/ecs-init/config"
-	"github.com/aws/amazon-ecs-init/ecs-init/gpu"
 
 	log "github.com/cihub/seelog"
 	godocker "github.com/fsouza/go-dockerclient"
@@ -387,7 +386,6 @@ func (c *Client) getHostConfig(envVarsFromFiles map[string]string) *godocker.Hos
 		if key == config.GPUSupportEnvVar && val == "true" {
 			if nvidiaGPUDevicesPresent() {
 				// bind mount gpu info dir
-				binds = append(binds, gpu.GPUInfoDirPath+":"+gpu.GPUInfoDirPath)
 			}
 		}
 	}
@@ -429,15 +427,7 @@ func getDockerPluginDirBinds() []string {
 
 // nvidiaGPUDevicesPresent checks if nvidia GPU devices are present in the instance
 func nvidiaGPUDevicesPresent() bool {
-	matches, err := MatchFilePatternForGPU(gpu.NvidiaGPUDeviceFilePattern)
-	if err != nil {
-		log.Errorf("Detecting Nvidia GPU devices failed")
-		return false
-	}
-	if matches == nil {
-		return false
-	}
-	return true
+	return false
 }
 
 var MatchFilePatternForGPU = FilePatternMatchForGPU
