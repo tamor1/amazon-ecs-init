@@ -18,6 +18,7 @@ Documentation=https://aws.amazon.com/documentation/ecs/
 Requires=docker.service
 After=docker.service
 After=cloud-final.service
+DefaultDependencies=no
 
 [Service]
 Type=simple
